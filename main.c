@@ -12,9 +12,8 @@ char * P2Q(int p, int q, char *num) {
     bool sign_flag = true;
     // bool space_flag = true;
     while (*qur != '\0') {
-        if ((*qur < '0' || *qur > '9') && (*qur < 'a' || *qur > 'z') && (*qur < 'A' || *qur > 'Z') &&
-                !(sign_flag && *qur == '+') /*&& !(space_flag && (*qur == ' ' || *qur == 160 || *qur == '\n' ||
-                                                               *qur == '\t' || *qur == '\r'))*/)
+        if (!(*qur >= '0' && *qur <= '9') && !(p >=10 && *qur >= 'a' && *qur <= 'a'+p-10) && !(p >=10 && *qur >= 'A' && *qur <= 'A'+p-10) &&
+                !(sign_flag && *qur == '+') )
             return NULL;
         if (*qur >= '0' && *qur <= '9') {
             n *= p;
@@ -59,7 +58,19 @@ char * P2Q(int p, int q, char *num) {
 int main() {
     int p, q;
     char *s = malloc(33* sizeof(char));
-    scanf("%d%d%s", &p, &q, s);
-    printf("%s", P2Q(p, q, s));
+    int k = scanf("%d%d%s", &p, &q, s);
+    if (k == 3) {
+        char *convertedS = P2Q(p, q, s);
+        if (convertedS != NULL) {
+            printf("%s", convertedS);
+            free(convertedS);
+        } else {
+            goto err;
+        }
+    } else {
+        err:
+        printf("[err]");
+    }
+    free(s);
     return 0;
 }
